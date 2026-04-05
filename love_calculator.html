@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Love Calculator | Find Your Match | Created By Takbir</title>
+    <meta name="description" content="Calculate your love percentage with your partner using Takbir's Love Calculator. A fun way to analyze your relationship compatibility instantly!">
+    <meta name="keywords" content="Love Calculator, Love Meter, Relationship Compatibility, Takbir, Love Test">
+    <meta name="author" content="Takbir">
+
+    <meta property="og:title" content="Love Calculator - Is it True Love?">
+    <meta property="og:description" content="Enter two names and find your love percentage instantly. Created by Takbir.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=Love+Calculator+By+Takbir">
+
+    <style>
+        :root {
+            --primary-pink: #ff4d6d;
+            --secondary-pink: #ff8fa3;
+            --soft-white: #fff0f3;
+            --deep-red: #c9184a;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            color: #444;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--soft-white);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header .creator-tag {
+            font-size: 0.85rem;
+            color: var(--deep-red);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        h1 {
+            color: var(--deep-red);
+            margin-bottom: 25px;
+            font-size: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--deep-red);
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--secondary-pink);
+            border-radius: 12px;
+            outline: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: var(--primary-pink);
+            box-shadow: 0 0 10px rgba(255, 77, 109, 0.2);
+        }
+
+        button {
+            background: linear-gradient(to right, var(--primary-pink), var(--deep-red));
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(201, 24, 74, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(201, 24, 74, 0.4);
+        }
+
+        #loading {
+            display: none;
+            margin-top: 25px;
+            font-weight: bold;
+            color: var(--deep-red);
+            animation: pulse 1.5s infinite;
+        }
+
+        #result {
+            margin-top: 25px;
+            display: none;
+        }
+
+        .percentage {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--primary-pink);
+            margin: 10px 0;
+        }
+
+        .heart-animation {
+            font-size: 2.5rem;
+            animation: beat 0.8s infinite alternate;
+        }
+
+        @keyframes beat {
+            to { transform: scale(1.2); }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+        .bg-heart {
+            position: absolute;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <header>
+            <div class="creator-tag">Created By Takbir</div>
+            <h1>The Love Calculator</h1>
+        </header>
+        
+        <section id="calculator-ui">
+            <div class="input-group">
+                <label for="name1">Your Name (You):</label>
+                <input type="text" id="name1" placeholder="Enter your name" aria-label="Your Name">
+            </div>
+
+            <div class="input-group">
+                <label for="name2">Partner's Name:</label>
+                <input type="text" id="name2" placeholder="Enter partner's name" aria-label="Partner's Name">
+            </div>
+
+            <button onclick="calculateLove()">Calculate Compatibility</button>
+        </section>
+
+        <section id="loading">
+            <p>CALCULATING YOUR LIFE PARTNER WITH YOU</p>
+        </section>
+
+        <section id="result" aria-live="polite">
+            <div class="heart-animation">💖</div>
+            <div class="percentage" id="score">0%</div>
+            <p id="message" style="font-weight: 600;"></p>
+            <button onclick="resetCalc()" style="margin-top:15px; background: #666; font-size: 0.8rem; padding: 8px;">Try Again</button>
+        </section>
+    </main>
+
+    <script>
+        function calculateLove() {
+            const name1 = document.getElementById('name1').value.trim();
+            const name2 = document.getElementById('name2').value.trim();
+            
+            if (!name1 || !name2) {
+                alert("Please fill in both names ❤️");
+                return;
+            }
+
+            document.getElementById('calculator-ui').style.display = 'none';
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+
+            setTimeout(() => {
+                loading.style.display = 'none';
+                
+                // Deterministic calculation
+                const combined = (name1 + name2).toLowerCase().replace(/\s/g, '');
+                let score = 0;
+                for (let i = 0; i < combined.length; i++) {
+                    score += combined.charCodeAt(i);
+                }
+                
+                const finalPercent = (score % 41) + 60; // Bias toward 60%-100% for fun
+
+                const resultDiv = document.getElementById('result');
+                const scoreDisplay = document.getElementById('score');
+                const messageDisplay = document.getElementById('message');
+
+                scoreDisplay.innerText = finalPercent + "%";
+                
+                if(finalPercent > 90) messageDisplay.innerText = "Absolute Perfection!";
+                else if(finalPercent > 80) messageDisplay.innerText = "Strong Connection!";
+                else messageDisplay.innerText = "Worth a Shot!";
+
+                resultDiv.style.display = 'block';
+            }, 2500);
+        }
+
+        function resetCalc() {
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('calculator-ui').style.display = 'block';
+            document.getElementById('name1').value = '';
+            document.getElementById('name2').value = '';
+        }
+
+        // SEO friendly heart background generator
+        function initHearts() {
+            const icons = ['❤️', '💖', '💗'];
+            for(let i=0; i<10; i++) {
+                let h = document.createElement('div');
+                h.className = 'bg-heart';
+                h.innerHTML = icons[Math.floor(Math.random()*icons.length)];
+                h.style.left = Math.random() * 90 + 'vw';
+                h.style.top = Math.random() * 90 + 'vh';
+                h.style.fontSize = Math.random() * 20 + 20 + 'px';
+                document.body.appendChild(h);
+            }
+        }
+        initHearts();
+    </script>
+</body>
+</html>
